@@ -11,4 +11,11 @@ public class JsonTest {
         String valor = manipulandoJson.criandoJson();
         Assert.assertEquals("Jamily", valor);
     }
+
+    @Test
+    public void lerJson(){
+        ManipulandoJson manipulandoJson = new ManipulandoJson();
+        manipulandoJson.navegarJsonArquivo();
+
+    }
 }
