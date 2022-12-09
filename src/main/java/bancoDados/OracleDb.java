@@ -1,8 +1,6 @@
 package bancoDados;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class OracleDb {
@@ -10,7 +8,7 @@ public class OracleDb {
     public void createConnection() throws SQLException {
         try {
             System.out.println("Iniciando conexão com o banco");
-            String serverName = "192.168.1.217";
+            String serverName = "192.168.1.216";
             String portNumber = "1521";
             String sid = "XE";
             String url = "jdbc:oracle:thin:@" + serverName + ":" + portNumber + ":" + sid;
@@ -20,6 +18,44 @@ public class OracleDb {
         } catch (SQLException e) {
             throw new SQLException(e);
         }
+    }
+
+    public String executeSelect(String query) throws SQLException {
+        String dado = "";
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        while (rs.next()) {
+            dado = rs.getString("NOME");
+            System.out.println(dado);
+        }
+
+        stmt.close();
+        connection.close();
+        System.out.println("Conexões com Banco Fechadas");
+        return dado;
+    }
+
+    public void insertQuery( String sqlInsert) throws SQLException {
+        try {
+            Statement stmt = connection.createStatement();
+            connection.setAutoCommit(false);
+            System.out.println("Inserindo Dados de Teste em execução ...");
+            int statusInsert = stmt.executeUpdate(sqlInsert);
+            if (statusInsert == 1) {
+                System.out.println("Dados de Teste inseridos com sucesso!");
+                connection.commit();
+            }else {
+                System.out.println("Erro ao inserir Dados de Teste");
+                connection.rollback();
+            }
+            stmt.close();
+            //connection.close();
+            System.out.println("Conexões com Banco Fechadas");
+
+        } catch (Exception e) {
+            throw new SQLException(e);
+        }
+
     }
 
 
